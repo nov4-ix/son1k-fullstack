@@ -1,0 +1,25 @@
+version: "3.9"
+services:
+  web:
+    build:
+      context: ./web
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_BASE=http://api:8000
+      - VITE_GHOST_BASE=http://ghost-backend:8000
+    depends_on:
+      - api
+      - ghost-backend
+
+  ghost-backend:
+    build:
+      context: ./ghost-studio/backend
+    env_file:
+      - ./ghost-studio/backend/.env
+    ports:
+      - "8081:8000"
+    volumes:
+      - ./outputs:/outputs
+    depends_on:
+      - redis
